@@ -19,25 +19,24 @@ Using the Object Oriented Programming skills you learned this week, we want you 
 The system must be started and a boundary must be set before any Action commands can be issued.
 
 #### Action Commands
-- Toggle lights: turns the lights on/off
-- Flash lights: flash the lights
-- Alert (t): sound the horn for t seconds
+- Alert: happens automatically when the drone reaches the edge of the boundary
 - Home: navigate Home
 - Move (t, d): move t seconds in d direction.
 
 The Drone should accept any Move instruction but it should never go beyond the configured Boundary.
 
-If it receives an instruction that results in it crossing the boundary it will go as far as it can and then sound the horn 3 times.
+If it receives an instruction that results in it crossing the boundary it will go as far as it can and Alert.
 
 Boundary detection relies on the Drone tracking its movement and knowing its current coordinates in relation to the boundaries.
 
 ### Goals
 
 - Spend time designing your object constructors. Identify all the "things" in the problem and decide if they should have their own constructor. Think about which objects share methods and how would you  implement that.
+- Remember OOP is not only about objects (the nouns in the problem) but also about behaviour. Think about the different actions that need to be performed and which objects should be in charge of them. How will your objects communicate with each other?
 - Research the problem domain. Familiarise yourself with the Maths required to solve different problems.
 - Implement the Drone software logic, providing a test suite, that uses the Command Interface and asserts using the state of the Drone.
 
-We recommend implementing the movement logic synchronously first (Day 1) and refactor it later to be asynchronous (Day 2).
+We recommend implementing the basic movement first and if you have time, refactor it to be able to move in all directions.
 
 ### Extra Credit
 
@@ -50,4 +49,4 @@ We recommend implementing the movement logic synchronously first (Day 1) and ref
 - Practice the OOP skills you've learned this week. Learn to plan a Class hierarchy and design objects interfaces.
 - Get introduced to asynchronous programming.
 - Learn how to explore a problem's domain.
-- Familiarise yourself with some vector maths, trigonometry and kinematics.
+- Familiarise yourself with some vector maths, trigonometry and kinematics, useful when modelling real world movement.
