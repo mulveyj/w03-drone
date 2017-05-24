@@ -112,9 +112,18 @@ describe('drone', function () {
         expect(skyNet.currentPosition.x).to.equal(5);
         skyNet.movement(12, 'S');
         expect(skyNet.currentPosition.y).to.equal(0);
-    }
-
-    );
+    });
+    it('goes home if told to', function () {
+        let skyNet = new Drone();
+        skyNet.setInitial(3, 2);
+        skyNet.setBoundary(10,10);
+        skyNet.start();
+        skyNet.movement(4,'E');
+        skyNet.movement(6,'N');
+        skyNet.home();
+        expect(skyNet.currentPosition.x).to.equal(3);
+        expect(skyNet.currentPosition.y).to.equal(2);
+    });
 });
 
 describe('boundary', function () {

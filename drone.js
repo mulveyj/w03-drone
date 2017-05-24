@@ -63,6 +63,9 @@ class Drone {
         this.boundary = new Boundary(x, y);
         this.boundaryIsSet = true;
     }
+    home () {
+        this.currentPosition = this.initialPosition;
+    }
 }
 
 class Vector {
