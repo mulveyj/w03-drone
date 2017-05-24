@@ -1,0 +1,25 @@
+{
+  "name": "w03-drone",
+  "version": "1.0.0",
+  "description": "At Northcoders we want to have an office drone, so we thought we would ask our students to write a program make it fly autonomously. What could go wrong?",
+  "main": "drone.js",
+  "scripts": {
+    "test": "mocha spec/",
+    "lint": "eslint ./"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/northcoders/w03-drone.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/northcoders/w03-drone/issues"
+  },
+  "homepage": "https://github.com/northcoders/w03-drone#readme",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "eslint": "^3.19.0",
+    "husky": "^0.13.3"
+  }
+}
