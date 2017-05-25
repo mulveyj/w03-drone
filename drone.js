@@ -1,30 +1,31 @@
 // const movement = require('./movement.js');
 
 class Drone {
-  constructor (mode) {
+  constructor () {
     this.initialPosition = new Vector(0, 0);
     this.active = false;
     this.currentPosition = this.initialPosition;
     this.speed = 0.5;
     this.boundaryIsSet = false;
     this.alerts = [];
-    this.mode = mode;
   }
   movement (time, dir) {
     if (this.active) {
-      if (this.mode) {
         const degree = Math.PI / 180;
         const dirs = [Math.sin(dir * degree), Math.cos(dir * degree)]
         const move = new Vector(dirs[0], dirs[1]);
-        const moveBy = move.multiply(time * this.speed);
-        const finalPosition = this.currentPosition.add(moveBy);
+        const moveBy = move.multiply(time * this.speed / 30);
+        const totalMove = move.multiply(time * this.speed);
+        const nextPosition = this.currentPosition.add(moveBy);
+        const finalPosition = this.currentPosition.add(totalMove);
         if (finalPosition.x < 0) {
           finalPosition.x = 0;
           this.alerts.push('Boundary exceeded');
-          document.write('boundary exceeded!');
         } else if (finalPosition.x > this.boundary.x) {
           finalPosition.x = this.boundary.x;
           this.alerts.push('Boundary exceeded');
+        } else {
+          finalPosition.x = +finalPosition.x.toFixed(3);
         }
         if (finalPosition.y < 0) {
           finalPosition.y = 0;
@@ -32,31 +33,13 @@ class Drone {
         } else if (finalPosition.y > this.boundary.y) {
           finalPosition.y = this.boundary.y;
           this.alerts.push('Boundary exceeded');
+        } else {
+          finalPosition.y = +finalPosition.y.toFixed(3);
         }
-        this.currentPosition = finalPosition;
-      } else {
-        const dirs = {N: [0, 1], S: [0, -1], E: [1, 0], W: [-1, 0]};
-        const move = new Vector(dirs[dir][0], dirs[dir][1]);
-        const moveBy = move.multiply(time * this.speed);
-        const finalPosition = this.currentPosition.add(moveBy);
-        if (finalPosition.x < 0) {
-          finalPosition.x = 0;
-          this.alerts.push('Boundary exceeded');
-        } else if (finalPosition.x > this.boundary.x) {
-          finalPosition.x = this.boundary.x;
-          this.alerts.push('Boundary exceeded');
-        }
-        if (finalPosition.y < 0) {
-          finalPosition.y = 0;
-          this.alerts.push('Boundary exceeded');
-        } else if (finalPosition.y > this.boundary.y) {
-          finalPosition.y = this.boundary.y;
-          this.alerts.push('Boundary exceeded');
-        }
-        this.currentPosition = finalPosition;
-      }
+        this.currentPosition = finalPosition; 
     }
   }
+
   setInitial (x, y) {
     let initial = new Vector(x, y);
     this.initialPosition = initial;
