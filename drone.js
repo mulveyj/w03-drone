@@ -10,9 +10,11 @@ class Drone {
     this.boundaryIsSet = false;
     this.alerts = [];
     this.moveBy = new Vector(0,0);
+    this.queue = [];
   }
   movement (time, dir) {
     if (this.active) {
+       
         const degree = Math.PI / 180;
         const dirs = [Math.round(Math.sin(dir * degree) * 100), -Math.round(Math.cos(dir * degree) * 100)];
         const move = new Vector(dirs[0], dirs[1]);
@@ -21,9 +23,8 @@ class Drone {
         this.finalPosition = this.currentPosition.add(totalMove);
         this.checkBoundary();
         // this.currentPosition = this.finalPosition; 
-    }
   }
-
+}
   checkBoundary () {
         if (this.finalPosition.x < this.boundary.x) {
           this.finalPosition.x = this.boundary.x;
@@ -49,7 +50,19 @@ class Drone {
     if (!Vector.equal(this.currentPosition, this.finalPosition)) {
       this.currentPosition = this.currentPosition.add(this.moveBy);
       this.checkBoundary();
-    }
+    } 
+    if (this.queue.length > 0 && Vector.equal(this.currentPosition, this.finalPosition)) {
+      this.multiMove();
+    } 
+  }
+
+  setQueue (arr) {
+    this.queue = arr;
+  }
+
+  multiMove () {
+    this.movement(...this.queue[0]);
+    this.queue.shift();
   }
 
   setInitial (x, y) {
@@ -116,6 +129,7 @@ class Boundary {
 let skyNet = new Drone();
 skyNet.setBoundary(50, 50, 400, 400);
 skyNet.setInitial(200, 200);
+skyNet.setQueue([[2, 90], [3, 37], [6, 190],[1.5, 280]]);
 skyNet.start();
 // skyNet.movement(2, 90);
 
