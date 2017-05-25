@@ -5,38 +5,45 @@ class Drone {
     this.initialPosition = new Vector(0, 0);
     this.active = false;
     this.currentPosition = this.initialPosition;
+    this.finalPosition = undefined;
     this.speed = 0.5;
     this.boundaryIsSet = false;
     this.alerts = [];
+    this.moveBy = undefined;
   }
   movement (time, dir) {
     if (this.active) {
         const degree = Math.PI / 180;
         const dirs = [Math.sin(dir * degree), Math.cos(dir * degree)]
         const move = new Vector(dirs[0], dirs[1]);
-        const moveBy = move.multiply(time * this.speed / 30);
+        this.moveBy = move.multiply(time * this.speed / 30);
         const totalMove = move.multiply(time * this.speed);
-        const nextPosition = this.currentPosition.add(moveBy);
-        const finalPosition = this.currentPosition.add(totalMove);
-        if (finalPosition.x < 0) {
-          finalPosition.x = 0;
+        this.finalPosition = this.currentPosition.add(totalMove);
+        if (this.finalPosition.x < 0) {
+          this.finalPosition.x = 0;
           this.alerts.push('Boundary exceeded');
-        } else if (finalPosition.x > this.boundary.x) {
-          finalPosition.x = this.boundary.x;
-          this.alerts.push('Boundary exceeded');
-        } else {
-          finalPosition.x = +finalPosition.x.toFixed(3);
-        }
-        if (finalPosition.y < 0) {
-          finalPosition.y = 0;
-          this.alerts.push('Boundary exceeded');
-        } else if (finalPosition.y > this.boundary.y) {
-          finalPosition.y = this.boundary.y;
+        } else if (this.finalPosition.x > this.boundary.x) {
+          this.finalPosition.x = this.boundary.x;
           this.alerts.push('Boundary exceeded');
         } else {
-          finalPosition.y = +finalPosition.y.toFixed(3);
+          this.finalPosition.x = +this.finalPosition.x.toFixed(3);
         }
-        this.currentPosition = finalPosition; 
+        if (this.finalPosition.y < 0) {
+          this.finalPosition.y = 0;
+          this.alerts.push('Boundary exceeded');
+        } else if (this.finalPosition.y > this.boundary.y) {
+          this.finalPosition.y = this.boundary.y;
+          this.alerts.push('Boundary exceeded');
+        } else {
+          this.finalPosition.y = +this.finalPosition.y.toFixed(3);
+        }
+        this.currentPosition = this.finalPosition; 
+    }
+  }
+
+  updatePosition () {
+    if (!Vector.equal(this.currentPosition, this.finalPosition)) {
+      this.currentPosition = this.currentPosition.add(moveBy);
     }
   }
 
@@ -88,7 +95,7 @@ class Vector {
     return new Vector(k * this.x, k * this.y);
   }
   static equal (vec1, vec2) {
-    return vec1.x === vec2.x && vec1.y === vec2.y;
+    return Math.abs(vec1.x - vec2.x) < 0.5 && Math.abs(vec1.y - vec2.y) < 0.5;
   }
 }
 
