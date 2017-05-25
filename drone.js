@@ -5,11 +5,11 @@ class Drone {
     this.initialPosition = new Vector(0, 0);
     this.active = false;
     this.currentPosition = this.initialPosition;
-    this.finalPosition = undefined;
+    this.finalPosition = this.initialPosition;
     this.speed = 0.5;
     this.boundaryIsSet = false;
     this.alerts = [];
-    this.moveBy = undefined;
+    this.moveBy = new Vector(0,0);
   }
   movement (time, dir) {
     if (this.active) {
@@ -19,6 +19,12 @@ class Drone {
         this.moveBy = move.multiply(time * this.speed / 30);
         const totalMove = move.multiply(time * this.speed);
         this.finalPosition = this.currentPosition.add(totalMove);
+        this.checkBoundary();
+        // this.currentPosition = this.finalPosition; 
+    }
+  }
+
+  checkBoundary () {
         if (this.finalPosition.x < this.boundary.x) {
           this.finalPosition.x = this.boundary.x;
           this.alerts.push('Boundary exceeded');
@@ -37,13 +43,12 @@ class Drone {
         } else {
           this.finalPosition.y = +this.finalPosition.y.toFixed(3);
         }
-        // this.currentPosition = this.finalPosition; 
-    }
   }
 
   updatePosition () {
     if (!Vector.equal(this.currentPosition, this.finalPosition)) {
       this.currentPosition = this.currentPosition.add(this.moveBy);
+      this.checkBoundary();
     }
   }
 
@@ -112,8 +117,8 @@ let skyNet = new Drone();
 skyNet.setBoundary(50, 50, 400, 400);
 skyNet.setInitial(200, 200);
 skyNet.start();
-skyNet.movement(2, 90);
+// skyNet.movement(2, 90);
 
 
 //console.log(skyNet.boundary.x, skyNet.boundary.y);
-// module.exports = {Boundary: Boundary, Vector: Vector, Drone: Drone};
+//module.exports = {Boundary: Boundary, Vector: Vector, Drone: Drone};
