@@ -8,6 +8,7 @@ describe('drone', function () {
     });
     it('should initialise start position', function () {
         let skyNet = new Drone();
+        skyNet.setBoundary(0,0,5,5);
         skyNet.setInitial(3, 2);
         expect(skyNet.initialPosition.x).to.equal(3.000);
         expect(skyNet.initialPosition.y).to.equal(2.000);
@@ -16,58 +17,59 @@ describe('drone', function () {
     });
     it('should change the current position of the drone', function () {
         let skyNet = new Drone();
+        skyNet.setBoundary(0,0,5,5);
         skyNet.setInitial(3, 2);
-        skyNet.setBoundary(5,5);
         skyNet.start();
         skyNet.movement(2,90);
         expect(skyNet.currentPosition.x).to.equal(4.000);
         expect(skyNet.currentPosition.y).to.equal(2.000);
         skyNet.movement(3,0);
         expect(skyNet.currentPosition.x).to.equal(4.000);
-        expect(skyNet.currentPosition.y).to.equal(3.500);
+        expect(skyNet.currentPosition.y).to.equal(0.500);
         skyNet.movement(4,270);
         expect(skyNet.currentPosition.x).to.equal(2.000);
-        expect(skyNet.currentPosition.y).to.equal(3.500);
+        expect(skyNet.currentPosition.y).to.equal(0.500);
         skyNet.movement(2,180);
         expect(skyNet.currentPosition.x).to.equal(2.000);
-        expect(skyNet.currentPosition.y).to.equal(2.500);
+        expect(skyNet.currentPosition.y).to.equal(1.500);
     });
     it('should not move until started', function () {
         let skyNet = new Drone();
+        skyNet.setBoundary(0,0,5,5);
         skyNet.setInitial(3, 2);
         skyNet.movement(2,90);
         expect(skyNet.currentPosition.x).to.equal(3.000);
         expect(skyNet.currentPosition.y).to.equal(2.000);
-        skyNet.setBoundary(5,5);
+        skyNet.setBoundary(0,0,5,5);
         skyNet.start();
         skyNet.movement(3,0);
         expect(skyNet.currentPosition.x).to.equal(3.000);
-        expect(skyNet.currentPosition.y).to.equal(3.500);
+        expect(skyNet.currentPosition.y).to.equal(0.500);
     });
     it('should not move after being shutdown', function () {
         let skyNet = new Drone();
+        skyNet.setBoundary(0,0,5,5);
         skyNet.setInitial(3, 2);
-        skyNet.setBoundary(5,5);
         skyNet.start();
         skyNet.movement(2,90);
         expect(skyNet.currentPosition.x).to.equal(4.000);
         expect(skyNet.currentPosition.y).to.equal(2.000);
         skyNet.movement(3,0);
         expect(skyNet.currentPosition.x).to.equal(4.000);
-        expect(skyNet.currentPosition.y).to.equal(3.500);
+        expect(skyNet.currentPosition.y).to.equal(0.500);
         skyNet.shutdown();
         skyNet.movement(4,270);
         expect(skyNet.currentPosition.x).to.equal(4.000);
-        expect(skyNet.currentPosition.y).to.equal(3.500);
+        expect(skyNet.currentPosition.y).to.equal(0.500);
     });
     it('should default to (0, 0) to start', function () {
         let skyNet = new Drone();
-        skyNet.setBoundary(5,5);
+        skyNet.setBoundary(0,0,5,5);
         skyNet.start();
         skyNet.movement(2,90);
         expect(skyNet.currentPosition.x).to.equal(1.000);
         expect(skyNet.currentPosition.y).to.equal(0.000);
-        skyNet.movement(3,0);
+        skyNet.movement(-3,0);
         expect(skyNet.currentPosition.x).to.equal(1.000);
         expect(skyNet.currentPosition.y).to.equal(1.500);
         expect(skyNet.initialPosition.x).to.equal(0.000);
@@ -75,8 +77,8 @@ describe('drone', function () {
     });
     it('should restart with default initial position', function () {
         let skyNet = new Drone();
+        skyNet.setBoundary(0,0,5,5);
         skyNet.setInitial(3, 2);
-        skyNet.setBoundary(5,5);
         skyNet.start();
         skyNet.movement(2,90);
         skyNet.movement(3,0);
@@ -101,22 +103,22 @@ describe('drone', function () {
     });
     it('should alert if boundary exceeded and limit movement', function () {
         let skyNet = new Drone();
+        skyNet.setBoundary(0,0,5,5);
         skyNet.setInitial(3, 2);
-        skyNet.setBoundary(5,5);
         skyNet.start();
         skyNet.movement(12,270);
         expect(skyNet.currentPosition.x).to.equal(0.000);
-        skyNet.movement(12, 0);
+        skyNet.movement(-12, 0);
         expect(skyNet.currentPosition.y).to.equal(5.000);
         skyNet.movement(12, 90);
         expect(skyNet.currentPosition.x).to.equal(5.000);
-        skyNet.movement(12, 180);
+        skyNet.movement(-12, 180);
         expect(skyNet.currentPosition.y).to.equal(0.000);
     });
     it('goes home if told to', function () {
         let skyNet = new Drone();
+        skyNet.setBoundary(0,0,10,10);
         skyNet.setInitial(3, 2);
-        skyNet.setBoundary(10,10);
         skyNet.start();
         skyNet.movement(4,90);
         skyNet.movement(6,0);
@@ -126,16 +128,16 @@ describe('drone', function () {
     });
     it('should work for movements given in degrees', function () {
         let skyNet = new Drone();
+        skyNet.setBoundary(0,0,10,10);
         skyNet.setInitial(0, 0);
-        skyNet.setBoundary(10,10);
         skyNet.start();
         skyNet.movement(4, 30);
         expect(skyNet.currentPosition.x).to.be.within(0.999, 1.001);
     });
     it('should work for multiple movement calls given in degrees', function () {
         let skyNet = new Drone();
+        skyNet.setBoundary(0,0,100,100);
         skyNet.setInitial(0, 0);
-        skyNet.setBoundary(100,100);
         skyNet.start();
         skyNet.movement(4, 30);
         skyNet.movement(4, 60);

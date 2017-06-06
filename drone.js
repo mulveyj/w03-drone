@@ -14,42 +14,41 @@ class Drone {
   }
   movement (time, dir) {
     if (this.active) {
-       
         const degree = Math.PI / 180;
         const dirs = [Math.round(Math.sin(dir * degree) * 100), -Math.round(Math.cos(dir * degree) * 100)];
         const move = new Vector(dirs[0], dirs[1]);
-        this.moveBy = move.multiply(time * this.speed / 30);
-        const totalMove = move.multiply(time * this.speed);
+        this.moveBy = move.multiply(time * this.speed / 100 / 30);
+        const totalMove = move.multiply(time * this.speed / 100);
         this.finalPosition = this.currentPosition.add(totalMove);
-        this.checkBoundary();
-        // this.currentPosition = this.finalPosition; 
+        this.checkBoundary(this.finalPosition);
+        this.currentPosition = this.finalPosition; 
   }
 }
-  checkBoundary () {
-        if (this.finalPosition.x < this.boundary.x) {
-          this.finalPosition.x = this.boundary.x;
+  checkBoundary (vec) {
+        if (vec.x < this.boundary.x) {
+          vec.x = this.boundary.x;
           this.alerts.push('Boundary exceeded');
-        } else if (this.finalPosition.x > this.boundary.x + this.boundary.w) {
-          this.finalPosition.x = this.boundary.x + this.boundary.w;
+        } else if (vec.x > this.boundary.x + this.boundary.w) {
+          vec.x = this.boundary.x + this.boundary.w;
           this.alerts.push('Boundary exceeded');
         } else {
-          this.finalPosition.x = +this.finalPosition.x.toFixed(3);
+          vec.x = +vec.x.toFixed(3);
         }
-        if (this.finalPosition.y < this.boundary.y) {
-          this.finalPosition.y = this.boundary.y;
+        if (vec.y < this.boundary.y) {
+          vec.y = this.boundary.y;
           this.alerts.push('Boundary exceeded');
-        } else if (this.finalPosition.y > this.boundary.y + this.boundary.h) {
-          this.finalPosition.y = this.boundary.y + this.boundary.h;
+        } else if (vec.y > this.boundary.y + this.boundary.h) {
+          vec.y = this.boundary.y + this.boundary.h;
           this.alerts.push('Boundary exceeded');
         } else {
-          this.finalPosition.y = +this.finalPosition.y.toFixed(3);
+          vec.y = +vec.y.toFixed(3);
         }
   }
 
   updatePosition () {
     if (!Vector.equal(this.currentPosition, this.finalPosition)) {
       this.currentPosition = this.currentPosition.add(this.moveBy);
-      this.checkBoundary();
+      this.checkBoundary(this.currentPosition);
     } 
     if (this.queue.length > 0 && Vector.equal(this.currentPosition, this.finalPosition)) {
       this.multiMove();
@@ -126,13 +125,14 @@ class Boundary {
   }
 }
 
+/*
 let skyNet = new Drone();
 skyNet.setBoundary(50, 50, 400, 400);
 skyNet.setInitial(200, 200);
 skyNet.setQueue([[2, 90], [3, 37], [6, 190],[1.5, 280]]);
 skyNet.start();
 // skyNet.movement(2, 90);
-
+*/
 
 //console.log(skyNet.boundary.x, skyNet.boundary.y);
-//module.exports = {Boundary: Boundary, Vector: Vector, Drone: Drone};
+module.exports = {Boundary: Boundary, Vector: Vector, Drone: Drone};
